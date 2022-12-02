@@ -7,3 +7,4 @@ $route['translate_uri_dashes'] = FALSE;
 
 $route['api/demo'] = 'api/ApiController/index';
 $route['api/usuarios'] = 'api/ApiController/usuarios';
+//$route['api/usuarios?nombre=(:any)'] = 'api/ApiController/usuariopornombre/$1';

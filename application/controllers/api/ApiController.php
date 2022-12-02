@@ -54,33 +54,67 @@ class ApiController extends RestController{
 
     public function usuarios_get(){
         //obtiene todos los usuarios consumiendo la api asociada a la URL
-    
-
         $apiurl ="https://gorest.co.in/public/v2/users";
         $requestjson = file_get_contents($apiurl);
         $rs= json_decode($requestjson, true);
-        if (isset($requestjson)){
-            $largo = count($rs);
-            //Se formatean los datos para coincidir con la estructura solicitada
-            for($i=0; $i<$largo; $i++){
-                $response[$i]["id"]=$rs[$i]["id"];
-                $response[$i]["nombre"]=$rs[$i]["name"];
-                $response[$i]["email"]=$rs[$i]["email"];
-                $response[$i]["genero"]=$rs[$i]["gender"];
-                if ($rs[$i]["status"]=="active"){
-                    $response[$i]["activo"]="true";
-                }else{
-                    $response[$i]["activo"]="false";
-                }
+        $largo = count($rs);
+        //Se formatean los datos para coincidir con la estructura solicitada
+        for($i=0; $i<$largo; $i++){
+            $response[$i]["id"]=$rs[$i]["id"];
+            $response[$i]["nombre"]=$rs[$i]["name"];
+            $response[$i]["email"]=$rs[$i]["email"];
+            $response[$i]["genero"]=$rs[$i]["gender"];
+            if ($rs[$i]["status"]=="active"){
+                $response[$i]["activo"]="true";
+            }else{
+                $response[$i]["activo"]="false";
             }
-            // Setea el response y finaliza
-            $this->response( $response, 200 );
-        }else{
-            $this->response( [
-                'status' => false,
-                'message' => 'Recurso no encontrado'
-            ], 404 );
         }
+        
+        if(empty($_GET)){
+            //Endpoint /usuarios
+            if (isset($requestjson)){
+                
+                // Setea el response y finaliza
+                $this->response( $response, 200 );
+            }else{
+                $this->response( [
+                    'status' => false,
+                    'message' => 'Recurso no encontrado'
+                ], 404 );
+            }
+        }else{
+            //Endpoint /usuarios?nomre=""
+            if(isset($_GET['nombre'])){
+                $respuesta=$_GET['nombre'];
+                for($i=0; $i<$largo; $i++){
+                    if ($response[$i]["nombre"]==$respuesta){
+                        $usuario[0]["id"]=$response[$i]["id"];
+                        $usuario[0]["nombre"]=$response[$i]["nombre"];
+                        $usuario[0]["email"]=$response[$i]["email"];
+                        $usuario[0]["genero"]=$response[$i]["genero"];
+                        $usuario[0]["activo"]=$response[$i]["activo"];
+
+                        // Setea el response y finaliza
+                        $this->response( $usuario, 200 );
+                        die();
+                    }
+                }
+                $this->response( [
+                    'status' => false,
+                    'message' => 'Recurso no encontrado'
+                ], 404 );
+            }
+
+            
+            
+        }
+        
+        
+    }
+
+    public function usuariopornombre_get($nombre){
+            echo "soy una api de consulta";
         
     }
 }
