@@ -77,11 +77,13 @@ class ApiController extends RestController{
                 
                 // Setea el response y finaliza
                 $this->response( $response, 200 );
+                die();
             }else{
                 $this->response( [
                     'status' => false,
                     'message' => 'Recurso no encontrado'
                 ], 404 );
+                die();
             }
         }else{
             //Endpoint /usuarios?nomre=""
@@ -104,18 +106,34 @@ class ApiController extends RestController{
                     'status' => false,
                     'message' => 'Recurso no encontrado'
                 ], 404 );
+                die();
             }
 
-            
-            
-        }
-        
-        
-    }
+            //Endpoint /usuarios?email=""
+            if(isset($_GET['email'])){
+                $respuesta=$_GET['email'];
+                for($i=0; $i<$largo; $i++){
+                    if ($response[$i]["email"]==$respuesta){
+                        $email[0]["id"]=$response[$i]["id"];
+                        $email[0]["nombre"]=$response[$i]["nombre"];
+                        $email[0]["email"]=$response[$i]["email"];
+                        $email[0]["genero"]=$response[$i]["genero"];
+                        $email[0]["activo"]=$response[$i]["activo"];
 
-    public function usuariopornombre_get($nombre){
-            echo "soy una api de consulta";
-        
+                        // Setea el response y finaliza
+                        $this->response( $email, 200 );
+                        die();
+                    }
+                }
+                $this->response( [
+                    'status' => false,
+                    'message' => 'Recurso no encontrado'
+                ], 404 );
+                die();
+            }
+   
+        }
+          
     }
 }
 
