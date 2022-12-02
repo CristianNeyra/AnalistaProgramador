@@ -8,7 +8,6 @@ require APPPATH . '/libraries/Format.php';
 
 
 class ApiController extends RestController{
-
     public function index_get(){
         //Funcion utilizada solo para conceptos de prueba
         
@@ -53,6 +52,37 @@ class ApiController extends RestController{
         }
     }
 
+    public function usuarios_get(){
+        //obtiene todos los usuarios consumiendo la api asociada a la URL
+    
+
+        $apiurl ="https://gorest.co.in/public/v2/users";
+        $requestjson = file_get_contents($apiurl);
+        $rs= json_decode($requestjson, true);
+        if (isset($requestjson)){
+            $largo = count($rs);
+            //Se formatean los datos para coincidir con la estructura solicitada
+            for($i=0; $i<$largo; $i++){
+                $response[$i]["id"]=$rs[$i]["id"];
+                $response[$i]["nombre"]=$rs[$i]["name"];
+                $response[$i]["email"]=$rs[$i]["email"];
+                $response[$i]["genero"]=$rs[$i]["gender"];
+                if ($rs[$i]["status"]=="active"){
+                    $response[$i]["activo"]="true";
+                }else{
+                    $response[$i]["activo"]="false";
+                }
+            }
+            // Setea el response y finaliza
+            $this->response( $response, 200 );
+        }else{
+            $this->response( [
+                'status' => false,
+                'message' => 'Recurso no encontrado'
+            ], 404 );
+        }
+        
+    }
 }
 
 ?>

@@ -6,3 +6,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['api/demo'] = 'api/ApiController/index';
+$route['api/usuarios'] = 'api/ApiController/usuarios';
