@@ -73,8 +73,8 @@ class ApiController extends RestController{
         
         if(empty($_GET)){
             //Endpoint /usuarios
+            //si el endpoint no contiene parametros de consulta, retorna todos los usuarios
             if (isset($requestjson)){
-                
                 // Setea el response y finaliza
                 $this->response( $response, 200 );
                 die();
@@ -86,11 +86,13 @@ class ApiController extends RestController{
                 die();
             }
         }else{
+
             //Endpoint /usuarios?nomre=""
+            //Valida si existe el parametro de consulta adecuado en el endpoint
             if(isset($_GET['nombre'])){
-                $respuesta=$_GET['nombre'];
+                $nombre=$_GET['nombre'];
                 for($i=0; $i<$largo; $i++){
-                    if ($response[$i]["nombre"]==$respuesta){
+                    if ($response[$i]["nombre"]==$nombre){
                         $usuario[0]["id"]=$response[$i]["id"];
                         $usuario[0]["nombre"]=$response[$i]["nombre"];
                         $usuario[0]["email"]=$response[$i]["email"];
@@ -102,18 +104,21 @@ class ApiController extends RestController{
                         die();
                     }
                 }
+
                 $this->response( [
                     'status' => false,
                     'message' => 'Recurso no encontrado'
                 ], 404 );
                 die();
+
             }
 
             //Endpoint /usuarios?email=""
+            //Valida si existe el parametro de consulta adecuado en el endpoint
             if(isset($_GET['email'])){
-                $respuesta=$_GET['email'];
+                $mailusuario=$_GET['email'];
                 for($i=0; $i<$largo; $i++){
-                    if ($response[$i]["email"]==$respuesta){
+                    if ($response[$i]["email"]==$mailusuario){
                         $email[0]["id"]=$response[$i]["id"];
                         $email[0]["nombre"]=$response[$i]["nombre"];
                         $email[0]["email"]=$response[$i]["email"];
@@ -125,11 +130,44 @@ class ApiController extends RestController{
                         die();
                     }
                 }
+
                 $this->response( [
                     'status' => false,
                     'message' => 'Recurso no encontrado'
                 ], 404 );
                 die();
+            }
+
+            //Endpoint /usuaruis?activos=true/false
+            //Valida si existe el parametro de consulta adecuado en el endpoint
+            if(isset($_GET['activos'])){
+                $activos=$_GET['activos'];
+                if($activos=="true" || $activos=="false"){
+                    
+                    $nuevoindex=0;
+                    $limite=$largo-1;
+                    for($i=0; $i<$largo;$i++){
+                        if ($response[$i]["activo"]==$activos){
+                            $usuarios[$nuevoindex]["id"]=$response[$i]["id"];
+                            $usuarios[$nuevoindex]["nombre"]=$response[$i]["nombre"];
+                            $usuarios[$nuevoindex]["email"]=$response[$i]["email"];
+                            $usuarios[$nuevoindex]["genero"]=$response[$i]["genero"];
+                            $usuarios[$nuevoindex]["activo"]=$response[$i]["activo"];
+                            $nuevoindex++;
+                        }
+                        if($i==$limite){
+                            // Setea el response y finaliza
+                            $this->response( $usuarios, 200 );
+                            die();
+                        }
+                    }
+                }else{
+                    $this->response( [
+                        'status' => false,
+                        'message' => 'Validacion de datos incorrecta.'
+                    ], 422);
+                    die();
+                }
             }
    
         }
