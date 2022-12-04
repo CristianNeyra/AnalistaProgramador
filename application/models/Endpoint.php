@@ -9,18 +9,21 @@ class Endpoint extends CI_Model {
 
     public function usuarios_get(){
         //utilizar este direccionamiento en ambiente de produccion
-        //$apiurl ="https://".$_SERVER['SERVER_NAME']."/api/usuarios";
+        $apiurl ="https://".$_SERVER['SERVER_NAME']."/api/usuarios";
 
         //obtiene todos los usuarios consumiendo la api asociada a la URL
-        $apiurl ="http://localhost/rest/api/usuarios";
+        //$apiurl ="http://localhost/rest/api/usuarios";
         $responsejson = file_get_contents($apiurl);
         $rs= json_decode($responsejson, true);
         return $rs;
     }
 
     public function nuevousuario($datos){
+        //utilizar este direccionamiento en ambiente de produccion
+        $apiurl ="https://".$_SERVER['SERVER_NAME']."/api/usuarios:";
+        
         //obtiene todos los usuarios consumiendo la api asociada a la URL
-        $apiurl ="http://localhost/rest/api/usuarios:";
+        //$apiurl ="http://localhost/rest/api/usuarios:";
         //$responsejson = file_get_contents($apiurl);
         
         $curl = curl_init($apiurl);

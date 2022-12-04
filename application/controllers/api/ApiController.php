@@ -178,7 +178,7 @@ class ApiController extends RestController{
             
         if(isset($_POST)){
             
-            $this->response($_POST,200);
+            //$this->response($_POST,200);
 
             //Se formatean los datos de post() para coincidir con el endpoint de gorest
 
@@ -232,6 +232,30 @@ class ApiController extends RestController{
         
         
     }
+
+    public function update_put($usuario){
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://gorest.co.in/public/v2/users/'.strval($usuario),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'PUT',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer e761243054d12fcec19fba6ad5120789909f08c13ece23acb7c6765189e387d4'
+        ),
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+        echo $response;
+            }
 }
 
 ?>

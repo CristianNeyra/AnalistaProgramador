@@ -15,5 +15,5 @@ $route['nuevousuario'] = 'api/ApiController/insert';
 //API Routes
 $route['api/demo'] = 'api/ApiController/index';
 $route['api/usuarios'] = 'api/ApiController/usuarios';
-//$route['api/usuarios?nombre=(:any)']['get'] = 'api/ApiController/usuariopornombre/$1';
 $route['api/usuarios:']['post'] = 'api/ApiController/insert';
+$route['api/usuarios/(:num)']['put'] = 'api/ApiController/update/$1';
