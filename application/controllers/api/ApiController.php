@@ -173,6 +173,65 @@ class ApiController extends RestController{
         }
           
     }
+
+    public function insert_post(){
+            
+        if(isset($_POST)){
+            
+            $this->response($_POST,200);
+
+            //Se formatean los datos de post() para coincidir con el endpoint de gorest
+
+            if($_POST['activo']=="true"){
+                $_POST['activo']="active"; 
+            }
+            if($_POST['activo']=="false"){
+                $_POST['activo']="inactive"; 
+            }
+
+            $data=[
+                'name'=>$_POST['nombre'],
+                'gender'=>$_POST['genero'],
+                'email'=>$_POST['email'],
+                'status'=>$_POST['activo']
+            ];
+            $jsonData = json_encode($data);
+
+            //Se envian los datos mediante cURL a gorest
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://gorest.co.in/public/v2/users',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => $jsonData,
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer e761243054d12fcec19fba6ad5120789909f08c13ece23acb7c6765189e387d4',
+                'Content-Type: application/json'
+            ),
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            echo $response;
+
+
+        }else{
+            $this->response( [
+                'status' => false,
+                'message' => 'Metodo no permitido. Fevor de verificar los metodos permitidos en las especificaciones'
+            ], 405);
+            die();
+        }
+        
+        
+    }
 }
 
 ?>
